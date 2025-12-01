@@ -46,6 +46,16 @@ impl DayOne {
             Some(*dial)
         })
     }
+
+    fn clicks(&self) -> impl Iterator<Item = isize> {
+        self.instructions.iter().scan(50, |dial, turn| {
+            let (new_dial, clicks) = turn_dial_2(*dial, turn);
+
+            *dial = new_dial;
+
+            Some(clicks)
+        })
+    }
 }
 
 impl Aoc for DayOne {
@@ -60,7 +70,7 @@ impl Aoc for DayOne {
     }
 
     fn part_two(&mut self) -> isize {
-        0
+        self.clicks().sum()
     }
 }
 
@@ -79,6 +89,37 @@ fn turn_dial(dial: isize, Turn { dir, amount }: &Turn) -> isize {
     } else {
         res
     }
+}
+
+fn turn_dial_2(initial_dial: isize, Turn { dir, amount }: &Turn) -> (isize, isize) {
+    let dir = match dir {
+        Dir::Left => -1,
+        Dir::Right => 1,
+    };
+
+    let mut clicks = amount / 100;
+
+    let res = initial_dial + (dir * (amount % 100));
+
+    if res == 0 {
+        clicks += 1;
+    }
+
+    let dial = if res < 0 {
+        if initial_dial > 0 {
+            clicks += 1;
+        }
+
+        res + 100
+    } else if res > 99 {
+        clicks += 1;
+
+        res - 100
+    } else {
+        res
+    };
+
+    (dial, clicks)
 }
 
 #[cfg(test)]
@@ -108,5 +149,19 @@ L82";
         let states: Vec<_> = DayOne::new(EXAMPLE.into()).dial_states().collect();
 
         assert_eq!(states, vec![82, 52, 0, 95, 55, 0, 99, 0, 14, 32]);
+    }
+
+    #[test]
+    fn part_two_example() {
+        let result = DayOne::new(EXAMPLE.into()).part_two();
+
+        assert_eq!(result, 6)
+    }
+
+    #[test]
+    fn part_two_example_states() {
+        let states: Vec<_> = DayOne::new(EXAMPLE.into()).clicks().collect();
+
+        assert_eq!(states, vec![1, 0, 1, 0, 1, 1, 0, 1, 0, 1]);
     }
 }
