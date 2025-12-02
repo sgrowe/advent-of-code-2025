@@ -1,21 +1,21 @@
 use std::fs::read_to_string;
 
-use crate::{aoc::Aoc, day_01::DayOne};
+use crate::{aoc::Aoc, day_01::DayOne, day_02::DayTwo};
 
 mod aoc;
 mod day_01;
+mod day_02;
 
 fn main() {
-    let days = [DayOne::new];
+    solve::<DayOne>(1);
+    solve::<DayTwo>(2);
+}
 
-    for (index, init) in days.into_iter().enumerate() {
-        let day_num = index + 1;
+fn solve<Day: Aoc>(day: usize) {
+    let input = read_to_string(format!("inputs/day_{:02}.txt", day)).unwrap();
 
-        let input = read_to_string(format!("inputs/day_{:02}.txt", day_num)).unwrap();
+    let mut solver = Day::new(input);
 
-        let mut day = init(input);
-
-        println!("Day {} part one: {}", day_num, day.part_one());
-        println!("Day {} part two: {}", day_num, day.part_two());
-    }
+    println!("Day {} part one: {}", day, solver.part_one());
+    println!("Day {} part two: {}", day, solver.part_two());
 }
