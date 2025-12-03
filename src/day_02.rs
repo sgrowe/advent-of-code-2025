@@ -8,6 +8,9 @@ pub struct DayTwo {
 }
 
 impl Aoc for DayTwo {
+    type PtOne = usize;
+    type PtTwo = usize;
+
     fn new(input: String) -> Self {
         let ranges = input
             .trim()
@@ -22,12 +25,12 @@ impl Aoc for DayTwo {
         DayTwo { ranges }
     }
 
-    fn part_one(&mut self) -> isize {
-        self.invalid_ids_pt1().sum::<usize>() as isize
+    fn part_one(&mut self) -> usize {
+        self.invalid_ids_pt1().sum()
     }
 
-    fn part_two(&mut self) -> isize {
-        self.invalid_ids_pt2().sum::<usize>() as isize
+    fn part_two(&mut self) -> usize {
+        self.invalid_ids_pt2().sum()
     }
 }
 

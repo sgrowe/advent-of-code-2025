@@ -1,4 +1,4 @@
-use std::fs::read_to_string;
+use std::{fs::read_to_string, time::Instant};
 
 use crate::{aoc::Aoc, day_01::DayOne, day_02::DayTwo};
 
@@ -14,8 +14,24 @@ fn main() {
 fn solve<Day: Aoc>(day: usize) {
     let input = read_to_string(format!("inputs/day_{:02}.txt", day)).unwrap();
 
+    let start = Instant::now();
     let mut solver = Day::new(input);
 
-    println!("Day {} part one: {}", day, solver.part_one());
-    println!("Day {} part two: {}", day, solver.part_two());
+    let pt_1 = solver.part_one();
+    let duration = start.elapsed();
+
+    println!(
+        "Day {} part one: {} - time taken: {:?}",
+        day, pt_1, duration
+    );
+
+    let start = Instant::now();
+
+    let pt_2 = solver.part_two();
+
+    let duration = start.elapsed();
+    println!(
+        "Day {} part two: {} - time taken: {:?}",
+        day, pt_2, duration
+    );
 }

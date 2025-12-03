@@ -59,14 +59,17 @@ impl DayOne {
 }
 
 impl Aoc for DayOne {
+    type PtOne = usize;
+    type PtTwo = isize;
+
     fn new(input: String) -> Self {
         DayOne {
             instructions: input.trim().lines().map(|l| l.parse().unwrap()).collect(),
         }
     }
 
-    fn part_one(&mut self) -> isize {
-        self.dial_states().filter(|&dial| dial == 0).count() as isize
+    fn part_one(&mut self) -> usize {
+        self.dial_states().filter(|&dial| dial == 0).count()
     }
 
     fn part_two(&mut self) -> isize {
