@@ -53,35 +53,51 @@ impl DayTwo {
 }
 
 fn is_invalid_pt1(id: usize) -> bool {
-    let as_str = id.to_string();
+    let digits = id.ilog10() + 1;
 
-    if as_str.len() % 2 != 0 {
+    if digits % 2 != 0 {
         return false;
     }
 
-    let mid = as_str.len() / 2;
+    let p = 10usize.pow(digits / 2);
 
-    return &as_str[0..mid] == &as_str[mid..];
+    let a = id / p;
+    let b = id % p;
+
+    return a == b;
 }
 
 fn is_invalid_pt2(id: usize) -> bool {
-    let as_str = id.to_string();
+    if is_invalid_pt1(id) {
+        return true;
+    }
 
-    for seq_len in 1..=as_str.len() / 2 {
-        if as_str.len() % seq_len != 0 {
+    let digits = id.ilog10() + 1;
+
+    let mut repeats = 3;
+    while repeats <= digits {
+        if digits % repeats != 0 {
+            repeats += 2;
             continue;
         }
 
-        let seq = &as_str[0..seq_len];
+        let seq_len = digits / repeats;
 
-        let repeats = as_str.len() / seq_len;
+        let p = 10usize.pow(seq_len);
+
+        let seq = id % p;
 
         if (1..repeats)
-            .map(|j| &as_str[(j * seq_len)..((j + 1) * seq_len)])
+            .map(|j| {
+                let n = p.pow(j);
+                (id / n) % p
+            })
             .all(|next_seq| seq == next_seq)
         {
             return true;
         }
+
+        repeats += 2;
     }
 
     return false;
