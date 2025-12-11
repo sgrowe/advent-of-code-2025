@@ -34,7 +34,19 @@ impl Aoc for DayFour {
     }
 
     fn part_two(&mut self) -> Self::PtTwo {
-        0
+        let mut spots: Vec<_> = self.accessible_spots().collect();
+        let mut count = spots.len();
+
+        while spots.len() > 0 {
+            for c in spots {
+                *self.get_mut(c) = false;
+            }
+
+            spots = self.accessible_spots().collect();
+            count += spots.len();
+        }
+
+        count
     }
 }
 
@@ -72,6 +84,12 @@ impl DayFour {
         self.grid[y * self.col_len() + x]
     }
 
+    fn get_mut(&mut self, (x, y): Coord) -> &mut bool {
+        let i = y * self.col_len() + x;
+
+        &mut self.grid[i]
+    }
+
     fn col_len(&self) -> usize {
         self.grid.len() / self.row_len
     }
@@ -101,5 +119,10 @@ mod tests {
     #[test]
     fn test_part_one() {
         assert_eq!(DayFour::new(EXAMPLE.into()).part_one(), 13);
+    }
+
+    #[test]
+    fn test_part_two() {
+        assert_eq!(DayFour::new(EXAMPLE.into()).part_two(), 43);
     }
 }
