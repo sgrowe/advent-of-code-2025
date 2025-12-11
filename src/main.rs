@@ -1,14 +1,16 @@
 use std::{fs::read_to_string, time::Instant};
 
-use crate::{aoc::Aoc, day_01::DayOne, day_02::DayTwo};
+use crate::{aoc::Aoc, day_01::DayOne, day_02::DayTwo, day_03::DayThree};
 
 mod aoc;
 mod day_01;
 mod day_02;
+mod day_03;
 
 fn main() {
     solve::<DayOne>(1);
     solve::<DayTwo>(2);
+    solve::<DayThree>(3);
 }
 
 fn solve<Day: Aoc>(day: usize) {
